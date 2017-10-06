@@ -1,0 +1,243 @@
+const Web3 = require('web3');
+const Tx = require('ethereumjs-tx');
+var exports = module.exports = {};
+
+var eth_account;
+var isConnected;
+
+var web3 = new Web3(new Web3.providers.HttpProvider('https://kovan.infura.io'));
+
+if (web3){
+	console.log('Blockchain connected (via Infura Kovan node)');
+	isConnected = true;
+}
+else{
+	console.log('Blockchain not connected(failed to use Infura Kovan testnet node)');
+	isConnected = false;
+}
+
+const owner_address = '0xbdf5a292de1C15CD3DAaA636dDdf043A02Ab16dE';
+const store_abi = [{"constant":true,"inputs":[],"name":"totalReviewAmount","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"placeID","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_comment","type":"string"},{"name":"_score","type":"uint256"}],"name":"addReview","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"overallScore","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"totalScore","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"reviews","outputs":[{"name":"comment","type":"string"},{"name":"score","type":"uint256"},{"name":"uploader","type":"address"},{"name":"creation_blockstamp","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[{"name":"_placeID","type":"string"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"uploader","type":"address"},{"indexed":false,"name":"comment","type":"string"},{"indexed":false,"name":"score","type":"uint256"}],"name":"LogReviewAdded","type":"event"}];
+const store_registry_abi = [{"constant":false,"inputs":[{"name":"_placeID","type":"string"}],"name":"addStore","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"bytes32"}],"name":"registry","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_placeID","type":"string"}],"name":"getStoreAddress","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"store_address","type":"address"}],"name":"LogStoreCreated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"old_store_address","type":"address"},{"indexed":true,"name":"new_store_address","type":"address"}],"name":"LogStoreChanged","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"old_owner","type":"address"},{"indexed":true,"name":"new_owner","type":"address"}],"name":"LogOwnershipTransferred","type":"event"}];
+const store_registry_address = "0x6a7bc7a110476ddb9c1c19e372c330aa66af2097";
+
+const registry_func_sig = {
+	'addStore': '0x662feffc',
+	'registry': '0x7ef50298',
+	'owner': '0x8da5cb5b',
+	'getStoreAddress': '0x96d122ea',
+	'transferOwnership': '0xf2fde38b',
+}
+
+const store_func_sig = {
+	'totalReviewAmount': '0x01293fb6',
+	'placeID': '0x46defcac',
+	'addReview': '0xaac0039a',
+	'overallScore': '0xaaf70975',
+	'totalScore': '0xc006719f',
+	'reviews': '0xe83ddcea',
+}
+
+var store_registry_instance = new web3.eth.Contract(store_registry_abi, store_registry_address);
+// console.log(store_registry_instance);
+
+
+var eth_account_list = [
+	{
+		'address':'0xbdf5a292de1C15CD3DAaA636dDdf043A02Ab16dE',
+		'private_key':new Buffer('dcf6e266229c4fee91e4345fb475f7d5f1b8af66b0614c837edd03d19646e7a4','hex')
+	},
+	{
+		'address':'0x8b26eCF45F8Fc8ae8dE7E6DF40A6686e7DB58938',
+		'private_key':new Buffer('5b200b80a213cbd47a7de05625ae5191d798c21b42f15e57469a5ffccb6d7126','hex')
+	}
+];
+
+
+// default login account
+window.onload = function(){
+
+	eth_account = eth_account_list[document.getElementById("account").value];
+	console.log(eth_account.address);
+	store_registry_instance.methods.owner().call()
+	.then(result =>{
+		console.log('contract owner is: '+result);
+		if (result == owner_address)
+			console.log('correct registry on Kovan');
+	});
+
+
+}
+
+// for switch account
+window.addEventListener("load", function(){
+	document.getElementById("account").addEventListener("change", function(){
+		eth_account = eth_account_list[document.getElementById("account").value];
+		console.log(eth_account.address);
+	})
+});
+
+exports.web3IsConnected = function(){
+	return isConnected;
+}
+
+exports.createStore = function(storeId, cb){
+	var data = registry_func_sig['addStore'] + web3.eth.abi.encodeParameter('string', storeId).slice(2); 
+	console.log('encoded input: '+data);
+
+	web3.eth.getTransactionCount(eth_account.address).then(nonce => {
+
+		var rawTx = {
+		nonce: nonce,
+		gasPrice: '0x09184e72a',
+		gasLimit:'0x2DC6C0',						 
+		gas: 587958,
+		from: eth_account.address,
+		to: store_registry_address, 
+		value: '0x00', 
+		chainId: 42,
+		data: data,
+		}
+
+		var tx = new Tx(rawTx);
+		console.log(eth_account.private_key);
+		tx.sign(eth_account.private_key);
+		// console.log(tx);
+		var serializedTx = tx.serialize();
+		// console.log(serializedTx.toString('hex'));
+
+		document.getElementById('feedback-msg').innerHTML = `
+		<div class='alert alert-warning' style='margin: 0px 70px 10px 0px; height:30px;padding:0px'>
+		<p style='font-size:17px; text-align:center; vertical-align:center;'>Creating Store ... </p>
+		</div>
+		`;
+		web3.eth.sendSignedTransaction('0x'+serializedTx.toString('hex'), function(err, hash) {
+		  if (err)
+		    console.log(err);
+		  else{
+		  	console.log("Create Store Tx hash: "+hash);
+		  	cb();
+		  }
+		  	
+		});
+	});
+}
+
+// TODO: add parameter "uploader address" in future
+exports.submitReview = function(storeId, content, score){
+	store_registry_instance.methods.getStoreAddress(storeId).call()
+		.then(store_address =>{
+			console.log('The Store you\'re writing review to is: '+ store_address);
+			var store_contract_instance = new web3.eth.Contract(store_abi, store_address);
+			console.log(store_contract_instance);
+			// check whether the store is correctly instantiated		
+			store_contract_instance.methods.placeID().call()
+				.then( result =>{
+					console.log('PlaceID seems to be: '+result);
+					if (result == storeId){
+						console.log('Right store verified.');					
+						// add new review
+						var data = store_func_sig['addReview'] + web3.eth.abi.encodeParameters(['string','uint256'],[content,score]).slice(2);
+						// console.log(data);
+						web3.eth.getTransactionCount(eth_account.address).then(nonce => {
+							var rawTx = {
+							nonce: nonce,
+							gasPrice: '0x09184e72a',						 
+						  	gas: 400000,
+							from: eth_account.address,
+							to: store_address, 
+							value: '0x00', 
+							chainId: 42,
+							data: data,
+							}
+
+							var tx = new Tx(rawTx);
+							tx.sign(eth_account.private_key);
+							// console.log(tx);
+							var serializedTx = tx.serialize();
+							// console.log(serializedTx.toString('hex'));
+
+							web3.eth.sendSignedTransaction('0x'+serializedTx.toString('hex'), function(err, hash) {
+							  if (err)
+							    console.log(err);
+							  else
+							  	console.log(hash);
+							});// End of sendSignedTransaction
+						});// End of getTransactionCount
+					}// End of if statement trying to ensure correct store instantiation
+					else{
+						console.log('Failed to go the store address!');
+					}
+				});// End of placeID RPC call
+		});//End of getStoreAddress RPC call
+}//End of submitReview function.
+
+exports.storeExist = function(storeId, cb){
+	// return store_registry_contract.storeExist(storeId);
+	store_registry_instance.methods.getStoreAddress(storeId).call()
+		.then(result =>{
+			console.log('store address: '+result)
+			var is_exist;
+			if (result == 0x0){
+				console.log('Store doesn\'t exist.');
+				is_exist = false;
+				cb(is_exist);
+			}
+			else{
+				console.log('Store does exist.');
+				is_exist = true;
+				cb(is_exist);
+			}
+		});
+}
+
+exports.readReviews = function(storeId, cb){
+	store_registry_instance.methods.getStoreAddress(storeId).call()
+	 .then( store_address =>{
+	 	console.log('Now reading reviews from: '+ store_address);
+
+	 	web3.eth.getPastLogs({
+			fromBlock: '4143840',
+			toBlock: 'latest',
+			address: store_address,
+			topics:['0xe1a7d7c6d8efe90c8d8270e1939d7e1f5c9fa831fee96d86a439a0b6a2c86e05',null]
+		}).then(logs => {
+			// console.log(logs);
+			var reviews = [];
+			for (var i=0; i<logs.length; i++){
+				let review = (web3.eth.abi.decodeLog([
+						{
+							type:'address',
+							name:'uploader',
+							indexed:true
+						},{
+							type:'string',
+							name:'comment'
+						},{
+							type:'uint256',
+							name:'score'
+						}
+					], logs[i].data,['0xe1a7d7c6d8efe90c8d8270e1939d7e1f5c9fa831fee96d86a439a0b6a2c86e05']));
+				reviews.push(review);
+			}
+			cb(reviews);
+		});// End of getPastLogs.
+	 });// End of getStoreAddress
+}
+
+exports.readOverallScore = function(storeId, cb){
+	store_registry_instance.methods.getStoreAddress(storeId).call()
+		.then(store_address =>{
+			console.log('The Store you\'re reading review from is: '+ store_address);
+			var store_contract_instance = new web3.eth.Contract(store_abi, store_address);
+
+			store_contract_instance.methods.overallScore().call()
+				.then(overall_score =>{
+					console.log('The overall score is: '+overall_score);
+					cb(overall_score);
+				});// Eno of overallScore RPC call
+		});// End of getStoreAddress RPC call
+}// End of readOverallScore function
+
+
+
