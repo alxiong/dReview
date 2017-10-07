@@ -339,6 +339,7 @@ function display(){
 					document.getElementById("noReview").style.display = "block";
 					return;
 				} else{
+					document.getElementById("noReview").style.display = "none";
 					console.log("displaying reviews...");
 					// console.log(reviews);
 					var tbody = document.getElementById("reviews");
