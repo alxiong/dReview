@@ -16,4 +16,4 @@ img {margin-top: 10px; float: right;}
 
 /*.score {text-align: center;}*/
 
-#newReview, #noReview, #createStore, #switchAccount {display: none;}
+#newReview, #noReview, #createStore, #switchAccount, #reviewArea {display: none;}
