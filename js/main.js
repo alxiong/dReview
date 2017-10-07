@@ -169,7 +169,9 @@ function getStoreFromUrl(url){
 	if (url.match("https://www.google.com.sg/maps/place/")){
 		results = url.split("/");
 		storeName = results[5].split('+').join(' ');
-		storeId = results[5].split('+').join('') + results[6];
+		storeLatLng = results[7].split('!');
+		console.log(storeLatLng);
+		storeId = results[5].split('+').join('') + storeLatLng[storeLatLng.length - 2].slice(2) + storeLatLng[storeLatLng.length - 1].slice(2);
 		return true;
 	} else {
 		return false;
