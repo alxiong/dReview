@@ -464,13 +464,7 @@ function getStoreFromUrl(url){
 		storeName = results[5].split('+').join(' ');
 		var storeLatLng = results[7].split('!');
 		// remove possible ?hl=en at the end of URL
-		var lastIndex = storeLatLng[storeLatLng.length - 1].indexOf("?");
-		console.log(lastIndex);
-		if (lastIndex > 0){
-			storeId = results[5].split('+').join('') + storeLatLng[storeLatLng.length - 2].slice(2) + storeLatLng[storeLatLng.length - 1].slice(2, lastIndex);
-		} else {
-			storeId = results[5].split('+').join('') + storeLatLng[storeLatLng.length - 2].slice(2) + storeLatLng[storeLatLng.length - 1].slice(2);
-		}
+		storeId = results[5].split('+').join('') + "--" + storeLatLng[storeLatLng.length - 2].slice(2).match(/[0-9]+\.[0-9]{3}/g) + "--" + storeLatLng[storeLatLng.length - 1].slice(2).match(/[0-9]+\.[0-9]{3}/g);
 		return true;
 	} else {
 		return false;
