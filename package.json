@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zzy96/PeerReviewPlugin.git"
+    "url": "git@github.com:AlexXiong97/dReview.git"
   },
-  "author": "Zhou Ziyao, Alex Xiong",
+  "author": "Zhou Zhiyao, Alex Xiong",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/zzy96/PeerReviewPlugin/issues"
+    "url": "https://github.com/AlexXiong97/dReview/tree/kovan/issues"
   },
-  "homepage": "https://github.com/zzy96/PeerReviewPlugin#readme",
+  "homepage": "https://github.com/AlexXiong97/dReview/tree/kovan#readme",
   "dependencies": {
     "bootstrap": "^3.3.7",
     "ethereumjs-tx": "^1.3.3",

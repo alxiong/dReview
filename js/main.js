@@ -30,7 +30,7 @@ function start(){
 function submitNewReview(){
 	var content = document.getElementById("content").value;
 	var score = document.getElementById("score").value;
-	console.log(content+ score);
+
 	bc.submitReview(storeId, content, score,function(){
 		console.log('success!')
 	});

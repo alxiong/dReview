@@ -10,13 +10,6 @@ contract StoreRegistry{
   address public owner;
 
   event LogStoreCreated(address indexed store_address);
-  event LogStoreChanged(address indexed old_store_address, address indexed new_store_address);
-  event LogOwnershipTransferred(address indexed old_owner, address indexed new_owner);
-
-  modifier onlyOwner() {
-      require(msg.sender == owner);
-      _;
-  }
 
 /*
  * Public Function
@@ -51,11 +44,4 @@ contract StoreRegistry{
     return registry[sha256(_placeID)];
   }
 
-  /// @dev only current owner could transfer ownership to a new owner
-  function transferOwnership(address newOwner) onlyOwner {
-     if (newOwner != address(0)) {
-         owner = newOwner;
-         LogOwnershipTransferred(msg.sender, owner);
-     }
-  }
 }

@@ -6,8 +6,6 @@ contract Store {
   uint256 public overallScore;
   uint256 public totalScore;
   uint256 public totalReviewAmount;
-  /// @param list of Review items
-  Review[] public reviews;
 
   /// @param creation_blockstamp: current time when review is uploaded. Recorded for future retrival filter.
   struct Review {
@@ -17,7 +15,7 @@ contract Store {
     uint256 creation_blockstamp;
   }
 
-  event LogReviewAdded(address indexed uploader, string comment, uint256 score);
+  event LogReviewAdded(address indexed uploader, string comment, uint256 score, uint256 blocktime);
 
   modifier validScore(uint256 _score) {
     require(_score >= 0 && _score <= 100);
@@ -34,19 +32,16 @@ contract Store {
    }
 
    /// @dev add a new review
-   function addReview(string _comment, uint256 _score)
+   /// @param _uploader as a parameter because msg.sender would be the address of infura node.
+   function addReview(string _comment, uint256 _score, address _uploader)
       public
       validScore(_score){
-        reviews.push(Review({
-          comment:_comment,
-          score:_score,
-          uploader:msg.sender,
-          creation_blockstamp: block.timestamp
-          }));
-
+       
         totalReviewAmount = totalReviewAmount + 1;
         totalScore = totalScore + _score;
         overallScore = totalScore / totalReviewAmount;
-        LogReviewAdded(msg.sender, _comment ,_score);
+
+        // Log New Review
+        LogReviewAdded(_uploader, _comment ,_score, block.timestamp);
      }
 }
