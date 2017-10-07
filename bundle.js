@@ -356,16 +356,24 @@ function display(){
 
 
 function createStoreWrapper(){
+	document.getElementById('createStore').style.display = "none";
 	bc.createStore(storeId, function(){
-		bc.storeExist((storeId), function(){
-			document.getElementById('feedback-msg').innerHTML = `
-			<div class='alert alert-success' style='margin: 0px 70px 10px 0px; height:30px;padding:0px'>
-			<p style='font-size:17px; text-align:center; vertical-align:center;'>Store Created! </p>
-			</div>
-			`;
-		});
+		var refreshCheck = setInterval(function(){
+			bc.storeExist(storeId, function(is_exist){
+				console.log("waiting...");
+				if (is_exist){
+					console.log("created!");
+					start();
+					// document.getElementById('feedback-msg').innerHTML = `
+					// <div class='alert alert-success' style='margin: 0px 70px 10px 0px; height:30px;padding:0px'>
+					// <p style='font-size:17px; text-align:center; vertical-align:center;'>Store Created! </p>
+					// </div>
+					// `;
+					clearInterval(refreshCheck);
+				}
+			});	
+		}, 1000);
 	});
-	
 }
 
 function getCurrentTabUrl(callback) {
@@ -395,7 +403,7 @@ function getCurrentTabUrl(callback) {
     console.assert(typeof url == 'string', 'tab.url should be a string');
 
 	if (bc.web3IsConnected()){
-		document.getElementById('feedback-msg').innerHTML += `
+		document.getElementById('feedback-msg').innerHTML = `
 		<div class='alert alert-success' style='margin: 0px 70px 10px 0px; height:30px;padding:0px'>
 		<p style='font-size:17px; text-align:center; vertical-align:center;'>Successfully connected to Blockchain!</p>
 		</div>
