@@ -285,7 +285,21 @@ function submitNewReview(){
 	var score = document.getElementById("score").value;
 
 	bc.submitReview(storeId, content, score,function(){
-		console.log('success!')
+		var refreshCheck = setInterval(function(){
+			bc.storeExist(storeId, function(is_exist){
+				console.log("waiting...");
+				if (is_exist){
+					console.log('review success!')
+					start();
+					// document.getElementById('feedback-msg').innerHTML = `
+					// <div class='alert alert-success' style='margin: 0px 70px 10px 0px; height:30px;padding:0px'>
+					// <p style='font-size:17px; text-align:center; vertical-align:center;'>Store Created! </p>
+					// </div>
+					// `;
+					clearInterval(refreshCheck);
+				}
+			});	
+		}, 1000);
 	});
 
 	// function in blockchainConnector;
