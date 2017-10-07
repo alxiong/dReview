@@ -302,11 +302,18 @@ function start(){
 function submitNewReview(){
 	var content = document.getElementById("content").value;
 	var score = document.getElementById("score").value;
-
+	document.getElementById('submitButton').style.display = "none";
+	document.getElementById('newReview').style.display = "none";
+	document.getElementById('feedback-msg').innerHTML = `
+	<div class='alert alert-success' style='margin: 0px 70px 10px 0px; height:30px;padding:0px'>
+	<p style='font-size:17px; text-align:center; vertical-align:center;'>Review Pending... </p>
+	</div>
+	`;
 	bc.submitReview(storeId, content, score, function(){
-		
+		setTimeout(function(){
+			start();
+		}, 10000);
 	});
-
 	// function in blockchainConnector;
 }
 
@@ -318,8 +325,11 @@ function display(){
 	bc.storeExist(storeId, function(result){
 		if (result){
 			document.getElementById("storeName").innerHTML = storeName;
-			document.getElementById('review_area').style.display='block';
+			document.getElementById('reviewArea').style.display='block';
+			document.getElementById("score").value = "";
+			document.getElementById("content").value = "";
 			document.getElementById("newReview").style.display = "block";
+			document.getElementById('submitButton').style.display = "block";
 
 			// get blockchain data
 
@@ -332,6 +342,9 @@ function display(){
 					console.log("displaying reviews...");
 					// console.log(reviews);
 					var tbody = document.getElementById("reviews");
+					while(tbody.hasChildNodes()){
+						tbody.removeChild(tbody.lastChild);
+					}
 					var td;
 					var node;
 					for (var i=0; i<reviews.length; i++){
@@ -447,11 +460,17 @@ function getCurrentTabUrl(callback) {
 
 function getStoreFromUrl(url){
 	if (url.match("https://www.google.com.sg/maps/place/")){
-		results = url.split("/");
+		var results = url.split("/");
 		storeName = results[5].split('+').join(' ');
-		storeLatLng = results[7].split('!');
-		// console.log(storeLatLng);
-		storeId = results[5].split('+').join('') + storeLatLng[storeLatLng.length - 2].slice(2) + storeLatLng[storeLatLng.length - 1].slice(2);
+		var storeLatLng = results[7].split('!');
+		// remove possible ?hl=en at the end of URL
+		var lastIndex = storeLatLng[storeLatLng.length - 1].indexOf("?");
+		console.log(lastIndex);
+		if (lastIndex > 0){
+			storeId = results[5].split('+').join('') + storeLatLng[storeLatLng.length - 2].slice(2) + storeLatLng[storeLatLng.length - 1].slice(2, lastIndex);
+		} else {
+			storeId = results[5].split('+').join('') + storeLatLng[storeLatLng.length - 2].slice(2) + storeLatLng[storeLatLng.length - 1].slice(2);
+		}
 		return true;
 	} else {
 		return false;
