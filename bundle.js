@@ -139,7 +139,7 @@ exports.submitReview = function(storeId, content, score){
 						console.log('Right store verified.');					
 						// add new review
 						var data = store_func_sig['addReview'] + web3.eth.abi.encodeParameters(['string','uint256','address'],[content,score,eth_account.address]).slice(2);
-						console.log(data);
+						// console.log(data);
 						web3.eth.getTransactionCount(eth_account.address).then(nonce => {
 							var rawTx = {
 							nonce: nonce,
@@ -222,8 +222,9 @@ exports.readReviews = function(storeId, cb){
 							name:'blocktime'
 						}
 					], logs[i].data,['0x53e81281a232ff6ce18e2ace5ad784f230c7dabfccde8ce81e828afcde52c1b0']));
+				review['reviewer'] =  '0x'+logs[i].topics[1].slice(26);
 				reviews.push(review);
-				console.log(review);
+				// console.log(review);
 			}
 			cb(reviews);
 		});// End of getPastLogs.
@@ -323,7 +324,7 @@ function display(){
 						tr.appendChild(td);
 						// reviewer
 						td = document.createElement("td");
-						node = document.createTextNode(reviews[i].uploader.slice(0,6)+'..'+reviews[i].uploader.slice(-4));
+						node = document.createTextNode(reviews[i].reviewer.slice(0,6)+'..'+reviews[i].reviewer.slice(-4));
 						td.appendChild(node);
 						tr.appendChild(td);
 						// content
@@ -421,7 +422,9 @@ function getStoreFromUrl(url){
 	if (url.match("https://www.google.com.sg/maps/place/")){
 		results = url.split("/");
 		storeName = results[5].split('+').join(' ');
-		storeId = results[5].split('+').join('') + results[6];
+		storeLatLng = results[7].split('!');
+		// console.log(storeLatLng);
+		storeId = results[5].split('+').join('') + storeLatLng[storeLatLng.length - 2].slice(2) + storeLatLng[storeLatLng.length - 1].slice(2);
 		return true;
 	} else {
 		return false;

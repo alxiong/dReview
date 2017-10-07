@@ -71,7 +71,7 @@ function display(){
 						tr.appendChild(td);
 						// reviewer
 						td = document.createElement("td");
-						node = document.createTextNode(reviews[i].uploader.slice(0,6)+'..'+reviews[i].uploader.slice(-4));
+						node = document.createTextNode(reviews[i].reviewer.slice(0,6)+'..'+reviews[i].reviewer.slice(-4));
 						td.appendChild(node);
 						tr.appendChild(td);
 						// content
@@ -170,7 +170,7 @@ function getStoreFromUrl(url){
 		results = url.split("/");
 		storeName = results[5].split('+').join(' ');
 		storeLatLng = results[7].split('!');
-		console.log(storeLatLng);
+		// console.log(storeLatLng);
 		storeId = results[5].split('+').join('') + storeLatLng[storeLatLng.length - 2].slice(2) + storeLatLng[storeLatLng.length - 1].slice(2);
 		return true;
 	} else {
