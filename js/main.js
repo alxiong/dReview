@@ -32,7 +32,7 @@ function submitNewReview(){
 	var score = document.getElementById("score").value;
 
 	bc.submitReview(storeId, content, score,function(){
-		console.log('success!')
+		
 	});
 
 	// function in blockchainConnector;

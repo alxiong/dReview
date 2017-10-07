@@ -123,7 +123,7 @@ exports.createStore = function(storeId, cb){
 }
 
 // TODO: add parameter "uploader address" in future
-exports.submitReview = function(storeId, content, score){
+exports.submitReview = function(storeId, content, score,cb){
 	store_registry_instance.methods.getStoreAddress(storeId).call()
 		.then(store_address =>{
 			console.log('The Store you\'re writing review to is: '+ store_address);
@@ -159,8 +159,10 @@ exports.submitReview = function(storeId, content, score){
 							web3.eth.sendSignedTransaction('0x'+serializedTx.toString('hex'), function(err, hash) {
 							  if (err)
 							    console.log(err);
-							  else
+							  else{
 							  	console.log(hash);
+							  	cb();
+							  }
 							});// End of sendSignedTransaction
 						});// End of getTransactionCount
 					}// End of if statement trying to ensure correct store instantiation
@@ -244,5 +246,22 @@ exports.readOverallScore = function(storeId, cb){
 		});// End of getStoreAddress RPC call
 }// End of readOverallScore function
 
-
+exports.newIncomingLog = function(storeId){
+	store_registry_instance.methods.getStoreAddress(storeId).call()
+		.then(store_address =>{
+			console.log("Hi hi hi");
+			var subscription = web3.eth.subscribe('logs',{
+				fromBlock: '4143840',
+				toBlock: 'latest',
+				address: store_address,
+				topics:['0x53e81281a232ff6ce18e2ace5ad784f230c7dabfccde8ce81e828afcde52c1b0',eth_account.address]
+			},function(error, result){
+				if(error)
+					console.log(error);
+				else{
+					console.log(result);
+				}
+			}); // End of subscription decleration.
+		});
+}
 
