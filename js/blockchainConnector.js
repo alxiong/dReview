@@ -126,11 +126,6 @@ exports.createStore = function(storeId, cb){
 		var serializedTx = tx.serialize();
 		// console.log(serializedTx.toString('hex'));
 
-		document.getElementById('feedback-msg').innerHTML = `
-		<div class='alert alert-warning' style='margin: 0px 70px 10px 0px; height:30px;padding:0px'>
-		<p style='font-size:17px; text-align:center; vertical-align:center;'>Creating Store ... </p>
-		</div>
-		`;
 		web3.eth.sendSignedTransaction('0x'+serializedTx.toString('hex'), function(err, hash) {
 		  if (err)
 		    console.log(err);

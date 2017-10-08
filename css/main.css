@@ -8,9 +8,10 @@ body {			/* Change width and height to own preferences */
 /* Basic style tweaks */
 section {padding: 5px;}
 
+#switchAccount {width:150px;}
 #submitButton {float: right;}
 
-img {margin-top: 10px; float: right;}
+img {float: right;}
 
 /*textarea {width:400px; height:100px; margin-left:35px; margin-right:35px;}*/
 

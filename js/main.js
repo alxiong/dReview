@@ -22,7 +22,6 @@ var storeName;
 var storeId;
 function start(){
 	// function in blockchainConnector;
-	document.getElementById('submitButton').addEventListener('click', submitNewReview);
 	console.log("searching...");
 	getCurrentTabUrl(display);
 }
@@ -58,7 +57,8 @@ function display(){
 			document.getElementById("content").value = "";
 			document.getElementById("newReview").style.display = "block";
 			document.getElementById('submitButton').style.display = "block";
-
+			document.getElementById('submitButton').addEventListener('click', submitNewReview);
+	
 			// get blockchain data
 
 			bc.readReviews(storeId, function(reviews){
@@ -119,6 +119,11 @@ function display(){
 function createStoreWrapper(){
 	document.getElementById('createStore').style.display = "none";
 	bc.createStore(storeId, function(){
+		document.getElementById('feedback-msg').innerHTML = `
+		<div class='alert alert-warning' style='margin: 0px 70px 10px 0px; height:30px;padding:0px'>
+		<p style='font-size:17px; text-align:center; vertical-align:center;'>Creating Store ... </p>
+		</div>
+		`;
 		var refreshCheck = setInterval(function(){
 			bc.storeExist(storeId, function(is_exist){
 				console.log("waiting...");
@@ -174,11 +179,17 @@ function getCurrentTabUrl(callback) {
 			document.getElementById("storeName").innerHTML = "Searching for "+storeName+" on Blockchain";
 			document.getElementById("switchAccount").style.display = "block";
 	    	callback();
+	    } else {
+	    	document.getElementById('feedback-msg').innerHTML = `
+			<div class='alert alert-warning' style='margin: 0px 70px 10px 0px; height:30px;padding:0px'>
+			<p style='font-size:17px; text-align:center; vertical-align:center;'>Please select a store on Google map!</p>
+			</div>
+			`;
 	    }
 	}
 	else{
 		document.getElementById('feedback-msg').innerHTML = `
-		<div class='alert alert-failure' style='margin: 0px 70px 10px 0px; height:30px;padding:0px'>
+		<div class='alert alert-warning' style='margin: 0px 70px 10px 0px; height:30px;padding:0px'>
 		<p style='font-size:17px; text-align:center; vertical-align:center;'>Not connected to Blockchain!</p>
 		</div>
 		`;
