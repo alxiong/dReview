@@ -190,7 +190,7 @@ function getCurrentTabUrl(callback) {
 function getStoreFromUrl(url){
 	if (url.match("https://www.google.com.sg/maps/place/")){
 		var results = url.split("/");
-		storeName = results[5].split('+').join(' ');
+		storeName = decodeURIComponent(results[5].split('+').join(' '));
 		var storeLatLng = results[7].split('!');
 		// remove possible ?hl=en at the end of URL
 		storeId = results[5].split('+').join('') + "--" + storeLatLng[storeLatLng.length - 2].slice(2).match(/[0-9]+\.[0-9]{3}/g) + "--" + storeLatLng[storeLatLng.length - 1].slice(2).match(/[0-9]+\.[0-9]{3}/g);
