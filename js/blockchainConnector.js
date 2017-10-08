@@ -49,7 +49,28 @@ var eth_account_list = [
 	{
 		'address':'0x8b26eCF45F8Fc8ae8dE7E6DF40A6686e7DB58938',
 		'private_key':new Buffer('5b200b80a213cbd47a7de05625ae5191d798c21b42f15e57469a5ffccb6d7126','hex')
+	},
+	{
+		'address': '0x7D8bF99DF0Fe4b02aE2d44db8e1d9A407dDc27d1',
+		'private_key':new Buffer('63d5cbb5f9d08d6bb164515681f0b488ec7f04cad57b713e33c72da0caabc012','hex')
+	},
+	{
+		'address': '0xeC47075685b22E2e63438967fD25dAf3a7b3EdE2',
+		'private_key':new Buffer('67ba0ed6ca701b2cc88ee26c249a34bc92e466c33a848eb916a11d56f84d5dea','hex')
+	},
+	{
+		'address': '0x3349bbD47f5005bC706989d8fc90dC875D20f4eb',
+		'private_key':new Buffer('6fae6af5b585a0739c12930ce281377604076c29598674506ea7be372f614f07','hex')
+	},
+	{
+		'address': '0xA23964c15af623Cb9C76D428D07962Cd717E2577',
+		'private_key':new Buffer('f7a038b058e95cea5c5a7ab0e82118edfed1a8e8e2bc0ae5d0e16ab0fcc90834','hex')
+	},
+	{
+		'address': '0x92c0462518567AB2f80A7C552a5493B2bC02000c',
+		'private_key':new Buffer('e799f6571820fe2ff05dae64f9158e877db1c2aa0a9f1f7508fd6f55b418a7c7','hex')
 	}
+
 ];
 
 
