@@ -15672,7 +15672,7 @@ module.exports={
   "_args": [
     [
       "elliptic@6.4.0",
-      "/home/alex/Desktop/dev/PeerReviewPlugin"
+      "/home/alex/Desktop/dev/dReview/gh-update"
     ]
   ],
   "_from": "elliptic@6.4.0",
@@ -15695,11 +15695,12 @@ module.exports={
     "/browserify-sign",
     "/create-ecdh",
     "/eth-lib",
+    "/jsontokens",
     "/secp256k1"
   ],
   "_resolved": "https://registry.npmjs.org/elliptic/-/elliptic-6.4.0.tgz",
   "_spec": "6.4.0",
-  "_where": "/home/alex/Desktop/dev/PeerReviewPlugin",
+  "_where": "/home/alex/Desktop/dev/dReview/gh-update",
   "author": {
     "name": "Fedor Indutny",
     "email": "fedor@indutny.com"
@@ -68403,7 +68404,7 @@ module.exports={
   "_args": [
     [
       "web3@1.0.0-beta.22",
-      "/home/alex/Desktop/dev/PeerReviewPlugin"
+      "/home/alex/Desktop/dev/dReview/gh-update"
     ]
   ],
   "_from": "web3@1.0.0-beta.22",
@@ -68427,7 +68428,7 @@ module.exports={
   ],
   "_resolved": "https://registry.npmjs.org/web3/-/web3-1.0.0-beta.22.tgz",
   "_spec": "1.0.0-beta.22",
-  "_where": "/home/alex/Desktop/dev/PeerReviewPlugin",
+  "_where": "/home/alex/Desktop/dev/dReview/gh-update",
   "author": {
     "name": "ethereum.org"
   },
@@ -68631,7 +68632,7 @@ module.exports={
   ],
   "_resolved": "git://github.com/frozeman/WebSocket-Node.git#7004c39c42ac98875ab61126e5b4a925430f592c",
   "_spec": "websocket@git://github.com/frozeman/WebSocket-Node.git#7004c39c42ac98875ab61126e5b4a925430f592c",
-  "_where": "/home/alex/Desktop/dev/PeerReviewPlugin",
+  "_where": "/home/alex/Desktop/dev/dReview/gh-update",
   "author": {
     "name": "Brian McKelvey",
     "email": "brian@worlize.com",
